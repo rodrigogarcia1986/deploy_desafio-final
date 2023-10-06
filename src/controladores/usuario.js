@@ -40,7 +40,6 @@ const login = async (req, res) => {
     try {
 
         usuarioExistente = await knex('usuarios').where({ email }).first()
-        console.log(usuarioExistente)
 
         if (!usuarioExistente) {
             return res.status(400).json({ mensagem: mensagens.dadosInválidos })
@@ -56,7 +55,6 @@ const login = async (req, res) => {
 
 
     } catch (erro) {
-        console.log(erro)
         return res.status(500).json({ mensagem: mensagens.erroInterno })
     }
 
