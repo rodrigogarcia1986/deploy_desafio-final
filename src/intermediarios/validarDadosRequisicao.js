@@ -6,7 +6,7 @@ const validarDadosRequisicao = joiSchema => async (req, res, next) => {
         next()
 
     } catch (erro) {
-        return res.status(400).json(erro.message)
+        return res.status(400).json({ erro: erro.message })
     }
 
 }
