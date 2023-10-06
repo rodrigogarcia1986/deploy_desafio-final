@@ -52,7 +52,7 @@ const login = async (req, res) => {
 
         const token = jwt.sign({ id: usuarioExistente.id }, process.env.SENHA_HASH, { expiresIn: '7d' })
 
-        return res.json(token)
+        return res.json({ token: token })
 
 
     } catch (erro) {
