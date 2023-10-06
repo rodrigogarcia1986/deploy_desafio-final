@@ -1,6 +1,6 @@
-const knex = require('../infra/conexao')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const requisicoes = require('../dados/usuario-dados')
 
 const mensagens = {
     erroInterno: 'Erro interno do servidor',
@@ -13,7 +13,7 @@ const cadastrarUsuario = async (req, res) => {
     const { nome, email, senha } = req.body
 
     try {
-        usuarioExistente = await knex('usuarios').where({ email }).first()
+        usuarioExistente = await requisicoes.buscarUsuarioPorEmail(email)
 
         if (usuarioExistente) {
             return res.status(400).json({ mensagem: mensagens.emailJaCadastrado })
@@ -21,11 +21,9 @@ const cadastrarUsuario = async (req, res) => {
 
         const senhaCriptografada = await bcrypt.hash(senha, 10)
 
-        const usuarioCadastrado = await knex('usuarios').insert({ nome, email, senha: senhaCriptografada }).returning('*')
+        const usuarioCadastrado = await requisicoes.cadastrarUsuario({ nome, email, senha: senhaCriptografada })
 
-        const { senha: _, ...usuarioRetornado } = usuarioCadastrado[0]
-
-        return res.status(201).json(usuarioRetornado)
+        return res.status(201).json(usuarioCadastrado)
 
     } catch (erro) {
         //console.log(erro)
@@ -39,7 +37,7 @@ const login = async (req, res) => {
 
     try {
 
-        usuarioExistente = await knex('usuarios').where({ email }).first()
+        usuarioExistente = await requisicoes.buscarUsuarioPorEmail(email)
 
         if (!usuarioExistente) {
             return res.status(400).json({ mensagem: mensagens.dadosInválidos })
@@ -57,7 +55,6 @@ const login = async (req, res) => {
     } catch (erro) {
         return res.status(500).json({ mensagem: mensagens.erroInterno })
     }
-
 }
 
 const detalharPerfil = async (req, res) => {
@@ -72,7 +69,7 @@ const atualizarPerfil = async (req, res) => {
     const { nome, email, senha } = req.body;
 
     try {
-        usuarioExistente = await knex('usuarios').where({ email }).first();
+        usuarioExistente = await requisicoes.buscarUsuarioPorEmail(email)
 
         if (usuarioExistente) {
             return res.status(400).json({ mensagem: mensagens.emailJaCadastrado });
@@ -80,7 +77,7 @@ const atualizarPerfil = async (req, res) => {
 
         const senhaCrypt = await bcrypt.hash(senha, 10);
 
-        atualizarUsuario = await knex('usuarios').where('id', req.usuario.id).update({ nome, email, senha: senhaCrypt });
+        atualizarUsuario = await requisicoes.atualizarUsuario({ nome, email, senha: senhaCrypt });
 
         return res.status(201).json();
     } catch (error) {
