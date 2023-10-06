@@ -1,12 +1,12 @@
 const knex = require('../infra/conexao')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const mensagens = require('../utilitarios/mensagens');
 
-const mensagens = {
-    erroInterno: 'Erro interno do servidor',
-    emailJaCadastrado: 'E-mail já cadastrado! Tente novamente com outro e-mail ou faça login.',
-    dadosInválidos: 'Dados inválidos!'
-}
+
+
+
+
 
 const cadastrarUsuario = async (req, res) => {
 
