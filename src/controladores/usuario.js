@@ -76,7 +76,7 @@ const atualizarPerfil = async (req, res) => {
 
         const senhaCrypt = await bcrypt.hash(senha, 10);
 
-        await requisicoes.atualizarUsuario({ nome, email, senha: senhaCrypt });
+        await requisicoes.atualizarUsuario({ id: usuario.id, nome, email, senha: senhaCrypt });
 
         return res.status(201).json();
     } catch (error) {
