@@ -63,6 +63,7 @@ const detalharPerfil = async (req, res) => {
 
 const atualizarPerfil = async (req, res) => {
     const { nome, email, senha } = req.body;
+    usuario = req.usuario;
 
     try {
         usuarioExistente = await requisicoes.buscarUsuarioPorEmail(email)
@@ -73,7 +74,7 @@ const atualizarPerfil = async (req, res) => {
 
         const senhaCrypt = await bcrypt.hash(senha, 10);
 
-        atualizarUsuario = await requisicoes.atualizarUsuario({ nome, email, senha: senhaCrypt });
+        await requisicoes.atualizarUsuario({ nome, email, senha: senhaCrypt });
 
         return res.status(201).json();
     } catch (error) {
