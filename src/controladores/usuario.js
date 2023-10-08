@@ -66,10 +66,12 @@ const atualizarPerfil = async (req, res) => {
     usuario = req.usuario;
 
     try {
-        usuarioExistente = await requisicoes.buscarUsuarioPorEmail(email)
+        if (email !== usuario.email) {
+            usuarioExistente = await requisicoes.buscarUsuarioPorEmail(email)
 
-        if (usuarioExistente) {
-            return res.status(400).json({ mensagem: mensagens.emailJaCadastrado });
+            if (usuarioExistente) {
+                return res.status(400).json({ mensagem: mensagens.emailJaCadastrado });
+            }
         }
 
         const senhaCrypt = await bcrypt.hash(senha, 10);
