@@ -63,17 +63,20 @@ const detalharPerfil = async (req, res) => {
 
 const atualizarPerfil = async (req, res) => {
     const { nome, email, senha } = req.body;
+    usuario = req.usuario;
 
     try {
-        usuarioExistente = await requisicoes.buscarUsuarioPorEmail(email)
+        if (email !== usuario.email) {
+            usuarioExistente = await requisicoes.buscarUsuarioPorEmail(email)
 
-        if (usuarioExistente) {
-            return res.status(400).json({ mensagem: mensagens.emailJaCadastrado });
+            if (usuarioExistente) {
+                return res.status(400).json({ mensagem: mensagens.emailJaCadastrado });
+            }
         }
 
         const senhaCrypt = await bcrypt.hash(senha, 10);
 
-        atualizarUsuario = await requisicoes.atualizarUsuario({ nome, email, senha: senhaCrypt });
+        await requisicoes.atualizarUsuario({ id: usuario.id, nome, email, senha: senhaCrypt });
 
         return res.status(201).json();
     } catch (error) {
