@@ -4,4 +4,6 @@ const listarCategorias = async () => {
   return await knex("categorias");
 };
 
-module.exports = listarCategorias;
+module.exports = {
+  listarCategorias
+};
