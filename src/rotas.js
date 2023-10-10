@@ -1,5 +1,6 @@
 const rotas = require('express').Router()
 const usuario = require('./controladores/usuario')
+const categoria = require('./controladores/categoria')
 const schemas = require('./validacoes/schemas')
 const validarDadosRequisicao = require('./intermediarios/validarDadosRequisicao')
 const { autenticar } = require('./intermediarios/autenticador')
@@ -14,6 +15,8 @@ rotas.use(autenticar)
 
 rotas.get('/usuario', usuario.detalharPerfil);
 rotas.put('/usuario', validarDadosRequisicao(schemas.schemaUsuario), usuario.atualizarPerfil);
+
+rotas.get('/categoria', categoria.listarCategorias);
 
 //rota pra testar autenticador
 rotas.get('/autenticar', (req, res) => res.json({ mensagem: "OK", usuario: req.usuario }))
