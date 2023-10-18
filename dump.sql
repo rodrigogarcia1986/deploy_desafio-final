@@ -21,7 +21,7 @@ create table produtos (
     quantidade_estoque integer not null,
     valor integer not null,
     categoria_id integer not null references categorias(id)
-)
+);
 
 create table clientes (
     id serial primary key,
@@ -34,4 +34,4 @@ create table clientes (
     bairro varchar(255),
     cidade varchar(255),
     estado varchar(255)
-)
+);

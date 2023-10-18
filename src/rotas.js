@@ -3,6 +3,7 @@ const usuario = require('./controladores/usuario')
 const schemas = require('./validacoes/schemas')
 const validarDadosRequisicao = require('./intermediarios/validarDadosRequisicao')
 const { autenticar } = require('./intermediarios/autenticador')
+const produto = require('./controladores/produtos');
 
 //rota pra teste do servidor
 rotas.get('/', (req, res) => res.json({ mensagem: "OK" }))
@@ -17,6 +18,8 @@ rotas.put('/usuario', validarDadosRequisicao(schemas.schemaUsuario), usuario.atu
 
 //rota pra testar autenticador
 rotas.get('/autenticar', (req, res) => res.json({ mensagem: "OK", usuario: req.usuario }))
+
+rotas.delete('/produto/:id', produto.excluirProduto);
 
 
 module.exports = rotas;
