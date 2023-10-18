@@ -28,10 +28,10 @@ create table clientes (
     nome varchar(1000) not null,
     email varchar(255) unique not null,
     cpf varchar(11) unique not null,
-    cep varchar(9) not null,
-    rua varchar(255) not null,
-    numero varchar(255) not null,
-    bairro varchar(255) not null,
-    cidade varchar(255) not null,
-    estado varchar(255) not null
+    cep varchar(9),
+    rua varchar(255),
+    numero varchar(255),
+    bairro varchar(255),
+    cidade varchar(255),
+    estado varchar(255)
 )
