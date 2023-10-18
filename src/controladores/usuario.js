@@ -22,7 +22,7 @@ const cadastrarUsuario = async (req, res) => {
         return res.status(201).json(usuarioCadastrado)
 
     } catch (erro) {
-        //console.log(erro)
+        console.log(erro)
         return res.status(500).json({ mensagem: mensagens.erroInterno })
     }
 }
