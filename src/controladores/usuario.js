@@ -36,11 +36,11 @@ const login = async (req, res) => {
         usuarioExistente = await requisicoes.buscarUsuarioPorEmail(email)
 
         if (!usuarioExistente) {
-            return res.status(400).json({ mensagem: mensagens.dadosInválidos })
+            return res.status(400).json({ mensagem: mensagens.dadosInvalidos })
         }
 
         if (!(await bcrypt.compare(senha, usuarioExistente.senha))) {
-            return res.status(400).json({ mensagem: mensagens.dadosInválidos })
+            return res.status(400).json({ mensagem: mensagens.dadosInvalidos })
         }
 
         const token = jwt.sign({ id: usuarioExistente.id }, process.env.SENHA_HASH, { expiresIn: '7d' })

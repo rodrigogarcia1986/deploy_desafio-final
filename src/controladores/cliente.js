@@ -7,7 +7,7 @@ const cadastrarCliente = async (req, res) => {
     let { cpf, cep, numero } = req.body
 
     if (typeof (cpf) === 'number' && cpf.toString().length !== 11) {
-        return res.status(400).json({ mensagem: mensagens.dadosInválidos })
+        return res.status(400).json({ mensagem: mensagens.dadosInvalidos })
     } else {
         cpf = cpf.toString()
     }
@@ -22,7 +22,7 @@ const cadastrarCliente = async (req, res) => {
     // cpf = `${cpf.slice(0, 3)}.${cpf.slice(3, 6)}.${cpf.slice(6, 9)}-${cpf.slice(9,)}`
 
     if (cep && typeof (cep) === 'number' && cep.toString().length !== 8) {
-        return res.status(400).json({ mensagem: mensagens.dadosInválidos })
+        return res.status(400).json({ mensagem: mensagens.dadosInvalidos })
     } else if (cep && typeof (cep) === 'number') {
         cep = cep.toString()
     }
