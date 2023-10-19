@@ -4,6 +4,7 @@ const categoria = require('./controladores/categoria')
 const schemas = require('./validacoes/schemas')
 const validarDadosRequisicao = require('./intermediarios/validarDadosRequisicao')
 const { autenticar } = require('./intermediarios/autenticador')
+const produto = require('./controladores/produto')
 
 //rota pra teste do servidor
 rotas.get('/', (req, res) => res.json({ mensagem: "OK" }))
@@ -17,6 +18,8 @@ rotas.use(autenticar)
 
 rotas.get('/usuario', usuario.detalharPerfil);
 rotas.put('/usuario', validarDadosRequisicao(schemas.schemaUsuario), usuario.atualizarPerfil);
+
+rotas.post('/produtos', validarDadosRequisicao(schemas.schemaProduto), produto.cadastrarProduto);
 
 
 //rota pra testar autenticador
