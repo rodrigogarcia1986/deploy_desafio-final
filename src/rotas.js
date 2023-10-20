@@ -28,6 +28,7 @@ rotas.get('/cliente', cliente.listarCliente)
 rotas.get('/autenticar', (req, res) => res.json({ mensagem: "OK", usuario: req.usuario }))
 
 rotas.delete('/produto/:id', produto.excluirProduto);
-
+rotas.put("/produto/:id", validarDadosRequisicao(schemas.schemaProduto), produto.atualizarProduto );
+rotas.get("/produto/:id", produto.detalharProduto)
 
 module.exports = rotas

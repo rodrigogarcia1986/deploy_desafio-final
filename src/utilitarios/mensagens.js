@@ -4,6 +4,7 @@ const mensagens = {
     cpfJaCadastrado: 'CPF já cadastrado!',
     dadosInválidos: 'Dados inválidos!',
     produtoInexistente: 'Produto não cadastrado',
+    categoriaInexistente: 'Categoria não cadastrada',
     naoAutorizado: "Não autorizado: faça login para acessar!",
     tokenInvalido: "Token inválido! Por favor, faça login novamente.",
     usuarioNaoEncontrado: "Cadastro não encontrado!"
