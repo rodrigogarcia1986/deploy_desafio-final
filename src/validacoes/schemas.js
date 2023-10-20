@@ -195,8 +195,38 @@ const schemaLogin = Joi.object({
 
 })
 
+const schemaProduto = Joi.object({
+    descricao: Joi.string().min(3).max(100).required().empty("").trim().messages({
+      "string.min": "A descrição deve ter no mínimo 3 caracteres.",
+      "string.max": "A descrição não pode ter mais que 100 dígitos.",
+      "any.required": "É necessário informar a descrição do produto.",
+      "any.empty": "A descrição não pode ser um campo vazio",
+    }),
+  
+    quantidade_estoque: Joi.number().positive().required().empty("").messages({
+      "number.positive":
+        "O campo quantidade_estoque precisa ser um número positivo",
+      "any.required": "É necessário informar a quantidade que há em estoque.",
+      "any.empty": "A quantidade_estoque não pode ser um campo vazio",
+    }),
+  
+    valor: Joi.number().positive().required().empty("").messages({
+      "number.positive": "O campo valor precisa ser um número positivo",
+      "any.required": "É necessário informar o valor do produto.",
+      "any.empty": "O valor não pode ser um campo vazio",
+    }),
+  
+    categoria_id: Joi.number().integer().positive().required().empty("").messages({
+      "number.integer": "O campo categoria_id precisa ser um número inteiro",
+      "number.positive": "O campo categoria_id precisa ser um número positivo",
+      "any.required": "É necessário informar a categoria_id",
+      "any.empty": "A categoria_id não pode ser um campo vazio",
+    }),
+});
+
 module.exports = {
     schemaUsuario,
     schemaLogin,
-    schemaCliente
+    schemaCliente,
+    schemaProduto
 }
