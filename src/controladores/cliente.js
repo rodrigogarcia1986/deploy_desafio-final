@@ -1,5 +1,3 @@
-//GET /cliente/:id
-const knex = require("../infra/conexao");
 const mensagens = require('../utilitarios/mensagens');
 const requisicoes = require('../dados/cliente-dados')
 
@@ -42,7 +40,7 @@ const detalharCliente = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const cliente = await requisicoes.buscarClientePorId(id) //knex("clientes").where("id", id).first();
+        const cliente = await requisicoes.buscarClientePorId(id)
 
         if (!cliente) {
             return res.status(404).json({ mensagem: mensagens.clienteNaoEncontrado })
@@ -52,6 +50,17 @@ const detalharCliente = async (req, res) => {
 
     } catch (error) {
         console.log(error.message)
+        return res.status(500).json({ mensagem: mensagens.erroInterno })
+    }
+}
+
+const listarCliente = async (req, res) => {
+
+    try {
+        return res.json(await requisicoes.buscarTodosClientes())
+
+    } catch (erro) {
+        //console.log(erro)
         return res.status(500).json({ mensagem: mensagens.erroInterno })
     }
 }
@@ -96,4 +105,9 @@ const atualizarCliente = async (req, res) => {
     }
 }
 
-module.exports = { detalharCliente, atualizarCliente, cadastrarCliente }
+module.exports = {
+    cadastrarCliente,
+    listarCliente,
+    detalharCliente,
+    atualizarCliente
+}
