@@ -6,6 +6,10 @@ const cadastrarCliente = async (req, res) => {
     const { nome, email, rua, bairro, cidade, estado } = req.body
     let { cpf, cep, numero } = req.body
 
+    if (!cpf) {
+        return res.status(400).json({ mensagem: mensagens.informarCPF })
+    }
+
     if (typeof (cpf) === 'number' && cpf.toString().length !== 11) {
         return res.status(400).json({ mensagem: mensagens.dadosInvalidos })
     } else {
