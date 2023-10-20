@@ -3,8 +3,9 @@ const usuario = require('./controladores/usuario')
 const cliente = require('./controladores/cliente')
 const categoria = require('./controladores/categoria')
 const schemas = require('./validacoes/schemas')
-const validarDadosRequisicao = require('./intermediarios/validarDadosRequisicao')
+const { validarDadosRequisicao, validarDadosParametro } = require('./intermediarios/validarDadosRequisicao')
 const { autenticar } = require('./intermediarios/autenticador')
+const { detalharCliente, atualizarCliente } = require('./controladores/cliente')
 
 //definir qual vamos usar produto ou produtos 
 const produto = require('./controladores/produto')
@@ -34,8 +35,11 @@ rotas.get('/produto', produto.listarProdutos)
 //rota pra testar autenticador
 rotas.get('/autenticar', (req, res) => res.json({ mensagem: "OK", usuario: req.usuario }))
 
+rotas.get('/cliente/:id', validarDadosParametro(schemas.schemaClienteId), detalharCliente);
+rotas.put('/cliente/:id', validarDadosParametro(schemas.schemaClienteId), validarDadosRequisicao(schemas.schemaCliente), atualizarCliente)
+
 rotas.delete('/produto/:id', produto.excluirProduto);
-rotas.put("/produto/:id", validarDadosRequisicao(schemas.schemaProduto), produto.atualizarProduto );
+rotas.put("/produto/:id", validarDadosRequisicao(schemas.schemaProduto), produto.atualizarProduto);
 rotas.get("/produto/:id", produto.detalharProduto)
 
 module.exports = rotas
