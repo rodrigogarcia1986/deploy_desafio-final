@@ -2,7 +2,7 @@ const rotas = require('express').Router()
 const usuario = require('./controladores/usuario')
 const categoria = require('./controladores/categoria')
 const schemas = require('./validacoes/schemas')
-const validarDadosRequisicao = require('./intermediarios/validarDadosRequisicao')
+const { validarDadosRequisicao, validarDadosParametro } = require('./intermediarios/validarDadosRequisicao')
 const { autenticar } = require('./intermediarios/autenticador')
 const { detalharCliente, atualizarCliente } = require('./controladores/cliente')
 
@@ -23,8 +23,8 @@ rotas.put('/usuario', validarDadosRequisicao(schemas.schemaUsuario), usuario.atu
 //rota pra testar autenticador
 rotas.get('/autenticar', (req, res) => res.json({ mensagem: "OK", usuario: req.usuario }))
 
-rotas.get('/cliente/:id', detalharCliente);
-rotas.put('/cliente/:id', atualizarCliente)
+rotas.get('/cliente/:id', validarDadosParametro(schemas.schemaClienteId), detalharCliente);
+rotas.put('/cliente/:id', validarDadosParametro(schemas.schemaClienteId), validarDadosRequisicao(schemas.schemaCliente), atualizarCliente)
 
 
 module.exports = rotas;
