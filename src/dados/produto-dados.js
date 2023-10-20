@@ -1,13 +1,26 @@
 const knex = require('../infra/conexao')
 
 
-const verificarCategoria = async (id) => {
-    const resultado = await knex("categorias")
+const verificarCategoriaQuery = async (id) => {
+    return await knex("categorias")
         .where('id',id)
-        return resultado;
+        .first()
   };
 
+  const listarProdutoQuery = async () => {
+    return await knex("produtos");
+  };
+
+  const cadastrarProdutoQuery = async(descricao,quantidade_estoque,valor,categoria_id)=>{
+      return await knex("produtos")
+      .insert({descricao,quantidade_estoque,valor,categoria_id})
+      .returning('*');
+
+  }
+
   module.exports= {
-    verificarCategoria
+    verificarCategoriaQuery,
+    listarProdutoQuery,
+    cadastrarProdutoQuery
 
   }
