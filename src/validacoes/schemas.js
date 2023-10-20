@@ -69,6 +69,8 @@ const schemaClienteId = Joi.object({
         })
 })
 
+
+
 const schemaCliente = Joi.object({
     nome: Joi.string()
         .min(3)
