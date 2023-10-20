@@ -2,6 +2,31 @@ const requisicoes = require('../dados/produto-dados');
 const mensagens = require('../utilitarios/mensagens');
 const categoriaDados = require('../dados/categoria-dados');
 
+
+const cadastrarProduto = async(req,res)=>{
+    const {descricao, quantidade_estoque, valor, categoria_id} = req.body
+    try {       
+    const categoriaExiste = await requisicoes.verificarCategoriaQuery(categoria_id)
+
+    if(!categoriaExiste){
+        return res.status(400).json({messagem:mensagens.categoriaInexistente})
+    }
+        await requisicoes.cadastrarProdutoQuery(descricao, quantidade_estoque, valor, categoria_id);
+
+        res.status(201).json({mensagem: mensagens.produtoCriado});
+
+    } catch (error) {
+        return res.status(500).json({mensagem: error.message})   
+    }
+}
+
+
+const listarProdutos = async (req,res)=>{
+    const produtos = await requisicoes.listarProduto()
+    return res.status(200).json(produtos)
+
+}
+
 const excluirProduto = async (req, res) => {
     const { id } = req.params;
     try {
@@ -61,8 +86,11 @@ const detalharProduto = async (req, res) => {
   }
 };
 
+
 module.exports = {
-    excluirProduto,
-    atualizarProduto,
-    detalharProduto
+cadastrarProduto,
+listarProdutos,
+excluirProduto,
+atualizarProduto,
+detalharProduto
 }
