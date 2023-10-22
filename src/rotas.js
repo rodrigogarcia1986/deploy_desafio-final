@@ -10,9 +10,6 @@ const { detalharCliente, atualizarCliente } = require('./controladores/cliente')
 //definir qual vamos usar produto ou produtos 
 const produto = require('./controladores/produto')
 
-const produto = require('./controladores/produtos');
-
-
 //rota pra teste do servidor
 rotas.get('/', (req, res) => res.json({ mensagem: "OK" }))
 
