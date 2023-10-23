@@ -9,7 +9,8 @@ const mensagens = {
     naoAutorizado: "Não autorizado: faça login para acessar!",
     tokenInvalido: "Token inválido! Por favor, faça login novamente.",
     usuarioNaoEncontrado: "Cadastro não encontrado!",
-    produtoCriado: "Produto criado com sucesso"
+    produtoCriado: "Produto criado com sucesso",
+    produtoJaCadastrado: "Este produto já foi cadastrado, vá em editar para atualizar as informações necessárias"
    
 
 }

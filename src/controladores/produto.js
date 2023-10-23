@@ -5,7 +5,13 @@ const categoriaDados = require('../dados/categoria-dados');
 
 const cadastrarProduto = async(req,res)=>{
     const {descricao, quantidade_estoque, valor, categoria_id} = req.body
-    try {       
+    try { 
+      
+    const produtoJaCadastrado = await requisicoes.verificarProdutosPorDescricao(descricao)
+    if(produtoJaCadastrado){
+      return res.status(400).json({mensagem:mensagens.produtoJaCadastrado});
+    }
+    
     const categoriaExiste = await requisicoes.verificarCategoriaQuery(categoria_id)
 
     if(!categoriaExiste){
@@ -93,4 +99,5 @@ listarProdutos,
 excluirProduto,
 atualizarProduto,
 detalharProduto
+
 }

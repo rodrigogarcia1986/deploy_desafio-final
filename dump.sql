@@ -22,7 +22,7 @@ INSERT INTO "categorias" (id,descricao) VALUES (5,'Livros e Papelaria'),(6,'Brin
 
 create table produtos (
     id serial primary key,
-    descricao varchar(1000) not null,
+    descricao varchar(1000) unique not null,
     quantidade_estoque integer not null,
     valor integer not null,
     categoria_id integer not null references categorias(id)
