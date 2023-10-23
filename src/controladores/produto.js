@@ -6,12 +6,12 @@ const categoriaDados = require('../dados/categoria-dados');
 const cadastrarProduto = async (req, res) => {
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body
   try {
-    const categoriaExiste = await requisicoes.verificarCategoriaQuery(categoria_id)
+    const categoriaExiste = await requisicoes.verificarCategoria(categoria_id)
 
     if (!categoriaExiste) {
       return res.status(400).json({ messagem: mensagens.categoriaInexistente })
     }
-    await requisicoes.cadastrarProdutoQuery(descricao, quantidade_estoque, valor, categoria_id);
+    await requisicoes.cadastrarProduto(descricao, quantidade_estoque, valor, categoria_id);
 
     res.status(201).json({ mensagem: mensagens.produtoCriado });
 
@@ -22,7 +22,7 @@ const cadastrarProduto = async (req, res) => {
 
 
 const listarProdutos = async (req, res) => {
-  const produtos = await requisicoes.listarProdutoQuery()
+  const produtos = await requisicoes.listarProduto()
   return res.status(200).json(produtos)
 
 }

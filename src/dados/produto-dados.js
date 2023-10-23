@@ -1,17 +1,16 @@
-
 const knex = require('../infra/conexao')
 
-const verificarCategoriaQuery = async (id) => {
+const verificarCategoria = async (id) => {
   return await knex("categorias")
     .where('id', id)
     .first()
 };
 
-const listarProdutoQuery = async () => {
+const listarProduto = async () => {
   return await knex("produtos");
 };
 
-const cadastrarProdutoQuery = async (descricao, quantidade_estoque, valor, categoria_id) => {
+const cadastrarProduto = async (descricao, quantidade_estoque, valor, categoria_id) => {
   return await knex("produtos")
     .insert({ descricao, quantidade_estoque, valor, categoria_id })
     .returning('*');
@@ -37,7 +36,7 @@ module.exports = {
   buscarProduto,
   excluirProduto,
   atualizarProduto,
-  verificarCategoriaQuery,
-  listarProdutoQuery,
-  cadastrarProdutoQuery
+  verificarCategoria,
+  listarProduto,
+  cadastrarProduto
 }

@@ -25,18 +25,20 @@ rotas.put('/usuario', validarDadosRequisicao(schemas.schemaUsuario), usuario.atu
 
 rotas.post('/cliente', validarDadosRequisicao(schemas.schemaCliente), cliente.cadastrarCliente)
 rotas.get('/cliente', cliente.listarCliente)
+rotas.get('/cliente/:id', validarDadosParametro(schemas.schemaClienteId), detalharCliente);
+rotas.put('/cliente/:id', validarDadosParametro(schemas.schemaClienteId), validarDadosRequisicao(schemas.schemaCliente), atualizarCliente)
 
 rotas.post('/produto', validarDadosRequisicao(schemas.schemaProduto), produto.cadastrarProduto);
 rotas.get('/produto', produto.listarProdutos)
+rotas.delete('/produto/:id', produto.excluirProduto);
+rotas.put("/produto/:id", validarDadosRequisicao(schemas.schemaProduto), produto.atualizarProduto);
+rotas.get("/produto/:id", produto.detalharProduto)
 
 //rota pra testar autenticador
 rotas.get('/autenticar', (req, res) => res.json({ mensagem: "OK", usuario: req.usuario }))
 
-rotas.get('/cliente/:id', validarDadosParametro(schemas.schemaClienteId), detalharCliente);
-rotas.put('/cliente/:id', validarDadosParametro(schemas.schemaClienteId), validarDadosRequisicao(schemas.schemaCliente), atualizarCliente)
 
-rotas.delete('/produto/:id', produto.excluirProduto);
-rotas.put("/produto/:id", validarDadosRequisicao(schemas.schemaProduto), produto.atualizarProduto);
-rotas.get("/produto/:id", produto.detalharProduto)
+
+
 
 module.exports = rotas
