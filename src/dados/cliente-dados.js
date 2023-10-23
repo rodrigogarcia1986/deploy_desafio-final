@@ -26,9 +26,22 @@ const buscarTodosClientes = async () => {
     return resultado
 }
 
+const buscarClientePorId = async (id) => {
+    return knex("clientes").where({ id }).first()
+};
+
+const atualizarCliente = async (cliente, id) => {
+    return knex("clientes")
+        .update(cliente)
+        .where({ id })
+        .returning("*");
+}
+
 module.exports = {
     cadastrarCliente,
     buscarClientePorEmail,
     buscarClientePorCPF,
-    buscarTodosClientes
+    buscarTodosClientes,
+    buscarClientePorId,
+    atualizarCliente,
 }
