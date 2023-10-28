@@ -25,7 +25,8 @@ create table produtos (
     descricao varchar(1000) not null,
     quantidade_estoque integer not null,
     valor integer not null,
-    categoria_id integer not null references categorias(id)
+    categoria_id integer not null references categorias(id),
+    produto_imagem varchar(1000)
 );
 
 create table clientes (
@@ -40,4 +41,20 @@ create table clientes (
     cidade varchar(255),
     estado varchar(255)
 );
+
+create table pedidos (
+    id serial primary key,
+    cliente_id integer not null references clientes(id),
+    observacao varchar(1000),
+    valor_total integer not null
+);
+
+create table pedido_produtos (
+    id serial primary key,
+    pedido_id integer not null references pedidos(id),
+    produto_id integer not null references produtos(id),
+    quantidade_produto integer not null,
+    valor_produto integer not null
+);
+
 
