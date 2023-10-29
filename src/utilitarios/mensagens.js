@@ -13,7 +13,10 @@ const mensagens = {
     produtoInexistente: 'Produto não cadastrado',
     categoriaInexistente: 'Categoria não cadastrada',
     usuarioNaoEncontrado: "Cadastro não encontrado!",
-    produtoCriado: "Produto criado com sucesso"
+    produtoCriado: "Produto criado com sucesso",
+    produtoJaCadastrado: "Este produto já foi cadastrado, vá em editar para atualizar as informações necessárias"
+   
+
 }
 
 module.exports = mensagens;

@@ -32,11 +32,20 @@ const atualizarProduto = async (produto) => {
   return resultado[0];
 };
 
-module.exports = {
+const verificarProdutosPorDescricao = async(descricao)=>{
+  return await knex("produtos")
+  .where('descricao', descricao)
+  .first()
+}
+
+module.exports = {  
+
   buscarProduto,
   excluirProduto,
   atualizarProduto,
   verificarCategoria,
   listarProduto,
-  cadastrarProduto
+  cadastrarProduto,
+  verificarProdutosPorDescricao
+
 }

@@ -4,6 +4,7 @@ const categoriaDados = require('../dados/categoria-dados');
 const armazenamento = require('../armazenamento')
 
 
+
 const cadastrarProduto = async (req, res) => {
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body
 
@@ -124,9 +125,10 @@ const detalharProduto = async (req, res) => {
 
 
 module.exports = {
-  cadastrarProduto,
-  listarProdutos,
-  excluirProduto,
-  atualizarProduto,
-  detalharProduto
+cadastrarProduto,
+listarProdutos,
+excluirProduto,
+atualizarProduto,
+detalharProduto
+
 }
