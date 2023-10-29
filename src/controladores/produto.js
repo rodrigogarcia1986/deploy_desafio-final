@@ -1,26 +1,33 @@
 const requisicoes = require('../dados/produto-dados');
 const mensagens = require('../utilitarios/mensagens');
 const categoriaDados = require('../dados/categoria-dados');
+const armazenamento = require('../armazenamento')
 
 
 
-const cadastrarProduto = async(req,res)=>{
-    const {descricao, quantidade_estoque, valor, categoria_id} = req.body
-    try { 
-      
-    const produtoJaCadastrado = await requisicoes.verificarProdutosPorDescricao(descricao)
-    if(produtoJaCadastrado){
-      return res.status(400).json({mensagem:mensagens.produtoJaCadastrado});
-    }
-    
-    const categoriaExiste = await requisicoes.verificarCategoriaQuery(categoria_id)
+const cadastrarProduto = async (req, res) => {
+  const { descricao, quantidade_estoque, valor, categoria_id } = req.body
+
+  const produto_imagem = req.file
+
+  try {
+    const categoriaExiste = await requisicoes.verificarCategoria(categoria_id)
 
     if (!categoriaExiste) {
       return res.status(400).json({ messagem: mensagens.categoriaInexistente })
     }
-    await requisicoes.cadastrarProduto(descricao, quantidade_estoque, valor, categoria_id);
 
-    res.status(201).json({ mensagem: mensagens.produtoCriado });
+    let produtoCadastrado = await requisicoes.cadastrarProduto(descricao, quantidade_estoque, valor, categoria_id);
+
+    if (produto_imagem) {
+      const imagemSalva = await armazenamento
+        .armazenarImagem(produtoCadastrado[0].id, descricao, produto_imagem.buffer, produto_imagem.mimetype)
+
+      produtoCadastrado = await requisicoes
+        .atualizarProduto({ id: produtoCadastrado[0].id, produto_imagem: imagemSalva.Location })
+    }
+
+    res.status(201).json(produtoCadastrado);
 
   } catch (error) {
     return res.status(500).json({ mensagem: mensagens.erroInterno })
@@ -59,6 +66,7 @@ const excluirProduto = async (req, res) => {
 const atualizarProduto = async (req, res) => {
   const { id } = req.params;
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
+  const produto_imagem = req.file
 
   if (isNaN(Number(id))) {
     return res.status(400).json({ mensagem: mensagens.produtoInexistente })
@@ -75,14 +83,23 @@ const atualizarProduto = async (req, res) => {
       return res.status(404).json({ mensagem: mensagens.categoriaInexistente });
     }
 
-    await requisicoes.atualizarProduto({
+    let produtoAtualizado = await requisicoes.atualizarProduto({
       id,
       descricao,
       quantidade_estoque,
       valor,
       categoria_id,
     });
-    return res.status(204).json();
+
+    if (produto_imagem) {
+      const imagemSalva = await armazenamento
+        .armazenarImagem(produtoAtualizado.id, descricao, produto_imagem.buffer, produto_imagem.mimetype)
+
+      produtoAtualizado = await requisicoes
+        .atualizarProduto({ id: produtoAtualizado.id, produto_imagem: imagemSalva.Location })
+    }
+
+    return res.status(201).json(produtoAtualizado);
   } catch (error) {
     return res.status(500).json({ erro: mensagens.erroInterno });
   }

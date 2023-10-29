@@ -10,9 +10,9 @@ const listarProduto = async () => {
   return await knex("produtos");
 };
 
-const cadastrarProduto = async (descricao, quantidade_estoque, valor, categoria_id) => {
+const cadastrarProduto = async (descricao, quantidade_estoque, valor, categoria_id, produto_imagem) => {
   return await knex("produtos")
-    .insert({ descricao, quantidade_estoque, valor, categoria_id })
+    .insert({ descricao, quantidade_estoque, valor, categoria_id, produto_imagem })
     .returning('*');
 }
 
@@ -28,7 +28,7 @@ const atualizarProduto = async (produto) => {
   const resultado = await knex("produtos")
     .where("id", produto.id)
     .update(produto)
-    .returning(["id", "descricao", "quantidade_estoque", "valor", "categoria_id"]);
+    .returning('*');
   return resultado[0];
 };
 

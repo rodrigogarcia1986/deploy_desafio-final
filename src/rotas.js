@@ -6,6 +6,7 @@ const schemas = require('./validacoes/schemas')
 const { validarDadosRequisicao, validarDadosParametro } = require('./intermediarios/validarDadosRequisicao')
 const { autenticar } = require('./intermediarios/autenticador')
 const { detalharCliente, atualizarCliente } = require('./controladores/cliente')
+const multer = require('multer')({})
 
 //definir qual vamos usar produto ou produtos 
 const produto = require('./controladores/produto')
@@ -28,10 +29,10 @@ rotas.get('/cliente', cliente.listarCliente)
 rotas.get('/cliente/:id', validarDadosParametro(schemas.schemaClienteId), detalharCliente);
 rotas.put('/cliente/:id', validarDadosParametro(schemas.schemaClienteId), validarDadosRequisicao(schemas.schemaCliente), atualizarCliente)
 
-rotas.post('/produto', validarDadosRequisicao(schemas.schemaProduto), produto.cadastrarProduto);
+rotas.post('/produto', multer.single('produto_imagem'), validarDadosRequisicao(schemas.schemaProduto), produto.cadastrarProduto);
 rotas.get('/produto', produto.listarProdutos)
 rotas.delete('/produto/:id', produto.excluirProduto);
-rotas.put("/produto/:id", validarDadosRequisicao(schemas.schemaProduto), produto.atualizarProduto);
+rotas.put("/produto/:id", multer.single('produto_imagem'), validarDadosRequisicao(schemas.schemaProduto), produto.atualizarProduto);
 rotas.get("/produto/:id", produto.detalharProduto)
 
 //rota pra testar autenticador
