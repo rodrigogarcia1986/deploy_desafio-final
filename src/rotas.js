@@ -10,6 +10,7 @@ const multer = require('multer')({})
 
 //definir qual vamos usar produto ou produtos 
 const produto = require('./controladores/produto')
+const pedidos = require('./controladores/pedidos')
 
 //rota pra teste do servidor
 rotas.get('/', (req, res) => res.json({ mensagem: "OK" }))
@@ -34,6 +35,8 @@ rotas.get('/produto', produto.listarProdutos)
 rotas.delete('/produto/:id', produto.excluirProduto);
 rotas.put("/produto/:id", multer.single('produto_imagem'), validarDadosRequisicao(schemas.schemaProduto), produto.atualizarProduto);
 rotas.get("/produto/:id", produto.detalharProduto)
+
+rotas.get('/pedidos', pedidos.listarPedidos);
 
 //rota pra testar autenticador
 rotas.get('/autenticar', (req, res) => res.json({ mensagem: "OK", usuario: req.usuario }))
