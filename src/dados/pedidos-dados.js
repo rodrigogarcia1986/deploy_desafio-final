@@ -18,8 +18,14 @@ const buscarCliente = async (cliente_id) => {
     return await knex('clientes').where({ id: cliente_id }).first();
 }
 
+const verificarPedido = async (item) => {
+    return await knex("produtos")
+      .where("id", "=", item.produto_id).first();
+  }
+
 module.exports = {
     listarPedidos,
     listarPedidoCliente,
-    buscarCliente
+    buscarCliente, 
+    verificarPedido
 }

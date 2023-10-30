@@ -27,6 +27,35 @@ const listarPedidos = async (req, res) => {
 
 }
 
+const cadastrarPedido = async (req, res) => {
+    const { observacao, pedido_produtos, cliente_id } = req.body
+    const usuario_id = req.usuario_id
+
+    try {
+
+    let erros = [];
+    let valorTotal = 0;
+
+    const cliente = await requisicao.buscarCliente(cliente_id);
+
+        if (!cliente) {
+            return res.status(404).json({ mensagem: mensagem.clienteNaoEncontrado })
+        }
+
+    for(const item of pedido_produtos){
+        if(!requisicao.verificarPedido){
+            erros.push({
+                mensagem: mensagem.produtoInexistente
+            })
+            continue
+        }
+    }
+    return res.status(201).json({ mensagem: mensagem.pedidoGerado })
+   } catch (error) {
+    return res.status(400).json({mensagem:mensagem.erroInterno  })
+   }
+}
+
 module.exports = {
     listarPedidos
 }

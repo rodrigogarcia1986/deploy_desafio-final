@@ -241,10 +241,36 @@ const schemaProduto = Joi.object({
     produto_imagem: Joi.string().base64()
 });
 
+const schemaPedido = Joi.object({
+    
+    observacao: Joi.string().default("").nullable(),
+    pedido_produtos: Joi.array().of(
+        Joi.object({
+
+            produto_id: Joi.number().positive().integer().required().message({
+            "number.integer": "O campo produto_id precisa ser um número inteiro",
+            "number.positive": "O campo produto_id precisa ser um número positivo", 
+            "any.required": "É necessário informar o campo porduto_id", 
+            "any.empty": "A categoria_id não pode ser um campo vazio",  
+            }),
+
+            quantidade_produto: Joi.number().positive().integer().required().message({
+            "number.integer": "O campo produto_id precisa ser um número inteiro",
+            "number.positive": "O campo produto_id precisa ser um número positivo", 
+            "any.required": "É necessário informar o campo porduto_id", 
+            "any.empty": "A categoria_id não pode ser um campo vazio",    
+            })
+        })
+    ) 
+    .min(1)
+    .require()   
+})
+
 module.exports = {
     schemaUsuario,
     schemaLogin,
     schemaClienteId,
     schemaCliente,
     schemaProduto,
+    schemaPedido
 }
