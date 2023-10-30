@@ -49,7 +49,7 @@ const excluirProduto = async (req, res) => {
   }
 
   try {
-    produtoExistente = await requisicoes.buscarProduto(id);
+    const produtoExistente = await requisicoes.buscarProduto(id);
     if (!produtoExistente) {
       return res.status(400).json({ mensagem: mensagens.produtoInexistente });
     }
@@ -125,10 +125,10 @@ const detalharProduto = async (req, res) => {
 
 
 module.exports = {
-cadastrarProduto,
-listarProdutos,
-excluirProduto,
-atualizarProduto,
-detalharProduto
+  cadastrarProduto,
+  listarProdutos,
+  excluirProduto,
+  atualizarProduto,
+  detalharProduto
 
 }
