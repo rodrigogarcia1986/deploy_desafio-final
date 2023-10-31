@@ -2,8 +2,6 @@ const requisicoes = require('../dados/produto-dados');
 const mensagens = require('../utilitarios/mensagens');
 const categoriaDados = require('../dados/categoria-dados');
 const armazenamento = require('../armazenamento')
-const knex = require('../infra/conexao') // apagar dps
-
 
 
 
@@ -27,17 +25,14 @@ const cadastrarProduto = async (req, res) => {
 
       produtoCadastrado = await requisicoes
         .atualizarProduto({ id: produtoCadastrado[0].id, produto_imagem: imagemSalva.Location })
-      console.log(imagemSalva);
     }
 
     res.status(201).json(produtoCadastrado);
 
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ mensagem: mensagens.erroInterno })
   }
 }
-
 
 const listarProdutos = async (req, res) => {
   const produtos = await requisicoes.listarProduto()
@@ -48,25 +43,22 @@ const listarProdutos = async (req, res) => {
 const excluirProduto = async (req, res) => {
   const { id } = req.params;
 
-  if (isNaN(Number(id))) {
-    return res.status(400).json({ mensagem: mensagens.produtoInexistente })
-  }
-
   try {
     const produtoExistente = await requisicoes.buscarProduto(id);
     if (!produtoExistente) {
       return res.status(400).json({ mensagem: mensagens.produtoInexistente });
     }
 
-    const verificaProdutoEmPedidos = await knex('pedido_produtos').where('produto_id', id).first();
-    if (verificaProdutoEmPedidos) {
-      return res.status(400).json({ mensagem: "O produto não pode ser excluido, pois já foi usado em um pedido." });
+    const produtoEmPedido = await requisicoes.buscarProdutoEmPedidos(id);
+    if (produtoEmPedido) {
+      return res.status(400).json({ mensagem: mensagens.produtoEmPedido });
     }
 
     if (produtoExistente.produto_imagem) {
       let path = produtoExistente.produto_imagem.split(`${process.env.S3_BUCKET}/`)[1]
       await armazenamento.excluirImagem(path)
     }
+
     await requisicoes.excluirProduto(id);
 
     return res.status(200).json()
@@ -81,17 +73,13 @@ const atualizarProduto = async (req, res) => {
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
   const produto_imagem = req.file
 
-  if (isNaN(Number(id))) {
-    return res.status(400).json({ mensagem: mensagens.produtoInexistente })
-  }
-
   try {
-    produtoExistente = await requisicoes.buscarProduto(id);
+    const produtoExistente = await requisicoes.buscarProduto(id);
     if (!produtoExistente) {
       return res.status(404).json({ mensagem: mensagens.produtoInexistente });
     }
 
-    categoriaExistente = await categoriaDados.buscarCategoriaPorId(categoria_id);
+    const categoriaExistente = await categoriaDados.buscarCategoriaPorId(categoria_id);
     if (!categoriaExistente) {
       return res.status(404).json({ mensagem: mensagens.categoriaInexistente });
     }
@@ -121,12 +109,8 @@ const atualizarProduto = async (req, res) => {
 const detalharProduto = async (req, res) => {
   const { id } = req.params;
 
-  if (isNaN(Number(id))) {
-    return res.status(400).json({ mensagem: mensagens.produtoInexistente })
-  }
-
   try {
-    produtoExistente = await requisicoes.buscarProduto(id);
+    const produtoExistente = await requisicoes.buscarProduto(id);
     if (!produtoExistente) {
       return res.status(404).json({ mensagem: mensagens.produtoInexistente });
     }

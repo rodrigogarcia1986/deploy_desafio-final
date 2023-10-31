@@ -62,7 +62,7 @@ const schemaLogin = Joi.object({
 
 })
 
-const schemaClienteId = Joi.object({
+const schemaId = Joi.object({
     id: Joi.number()
         .messages({
             'number.base': 'Informe um ID válido'
@@ -244,7 +244,7 @@ const schemaProduto = Joi.object({
 module.exports = {
     schemaUsuario,
     schemaLogin,
-    schemaClienteId,
+    schemaId,
     schemaCliente,
     schemaProduto,
 }
