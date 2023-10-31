@@ -27,6 +27,64 @@ const listarPedidos = async (req, res) => {
 
 }
 
-module.exports = {
-    listarPedidos
-}
+const cadastrarPedido = async (req, res) => {
+    const { observacao, pedido_produtos, cliente_id } = req.body;
+  
+    try {
+      const cliente = await requisicao.buscarCliente(cliente_id);
+  
+      if (!cliente) {
+        return res.status(404).json({ mensagem: mensagem.clienteNaoEncontrado });
+      }
+  
+      const erros = [];
+      let valorTotal = 0;
+  
+      for (const item of pedido_produtos) {
+        const produto = await produtoDados.buscarProduto(item.produto_id);
+        if (!produto) {
+          erros.push({
+            mensagem: mensagem.produtoInexistente,
+          });
+          continue;
+        }
+  
+        if (item.quantidade_produto > produto.quantidade_estoque) {
+          erros.push({
+            mensagem: mensagem.produtoInsuficiente,
+          });
+          continue;
+        }
+  
+        valorTotal += produto.valor * item.quantidade_produto;
+      }
+  
+      if (erros.length > 0) {
+        return res.status(400).json({ erros });
+      }
+  
+      const pedido = await requisicao.cadastrarPedido(
+        cliente_id,
+        observacao,
+        valorTotal
+      );
+  
+      for (const item of pedido_produtos) {
+        const produto = await produtoDados.buscarProduto(item.produto_id);
+  
+        await requisicao.cadastrarProdutoEmPedido(pedido, item, produto.valor);
+  
+        produto.quantidade_estoque -= item.quantidade_produto;
+        await produtoDados.atualizarProduto(produto);
+      }
+  
+      return res.status(201).json({ mensagem: mensagem.pedidoGerado });
+    } catch (error) {
+      return res.status(400).json({ mensagem: mensagem.erroInterno });
+    }
+  };
+  
+  module.exports = {
+    listarPedidos,
+    cadastrarPedido,
+  };
