@@ -2,6 +2,8 @@ const requisicoes = require('../dados/produto-dados');
 const mensagens = require('../utilitarios/mensagens');
 const categoriaDados = require('../dados/categoria-dados');
 const armazenamento = require('../armazenamento')
+const knex = require('../infra/conexao') // apagar dps
+
 
 
 
@@ -25,11 +27,13 @@ const cadastrarProduto = async (req, res) => {
 
       produtoCadastrado = await requisicoes
         .atualizarProduto({ id: produtoCadastrado[0].id, produto_imagem: imagemSalva.Location })
+      console.log(imagemSalva);
     }
 
     res.status(201).json(produtoCadastrado);
 
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ mensagem: mensagens.erroInterno })
   }
 }
@@ -54,6 +58,15 @@ const excluirProduto = async (req, res) => {
       return res.status(400).json({ mensagem: mensagens.produtoInexistente });
     }
 
+    const verificaProdutoEmPedidos = await knex('pedido_produtos').where('produto_id', id).first();
+    if (verificaProdutoEmPedidos) {
+      return res.status(400).json({ mensagem: "O produto não pode ser excluido, pois já foi usado em um pedido." });
+    }
+
+    if (produtoExistente.produto_imagem) {
+      let path = produtoExistente.produto_imagem.split(`${process.env.S3_BUCKET}/`)[1]
+      await armazenamento.excluirImagem(path)
+    }
     await requisicoes.excluirProduto(id);
 
     return res.status(200).json()
