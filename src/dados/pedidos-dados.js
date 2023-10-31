@@ -18,14 +18,34 @@ const buscarCliente = async (cliente_id) => {
     return await knex('clientes').where({ id: cliente_id }).first();
 }
 
-const verificarPedido = async (item) => {
-    return await knex("produtos")
-      .where("id", "=", item.produto_id).first();
-  }
-
-module.exports = {
+  const cadastrarPedido = async (cliente_id, observacao, valorTotal) => {
+    const resultado = await knex("pedidos")
+      .insert({
+        cliente_id: cliente_id,
+        observacao: observacao,
+        valor_total: valorTotal,
+      })
+      .returning("*");
+    return resultado[0];
+  };
+  
+  const cadastrarProdutoEmPedido = async (pedido, item, valorProduto) => {
+    const resultado = await knex("pedido_produtos")
+      .insert({
+        pedido_id: pedido.id,
+        produto_id: item.produto_id,
+        quantidade_produto: item.quantidade_produto,
+        valor_produto: valorProduto,
+      })
+      .returning("*");
+    return resultado[0];
+  };
+  
+  module.exports = {
     listarPedidos,
     listarPedidoCliente,
-    buscarCliente, 
-    verificarPedido
-}
+    buscarCliente,
+    cadastrarPedido,
+    cadastrarProdutoEmPedido,
+  };
+  
