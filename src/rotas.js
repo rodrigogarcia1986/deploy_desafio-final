@@ -27,14 +27,14 @@ rotas.put('/usuario', validarDadosRequisicao(schemas.schemaUsuario), usuario.atu
 
 rotas.post('/cliente', validarDadosRequisicao(schemas.schemaCliente), cliente.cadastrarCliente)
 rotas.get('/cliente', cliente.listarCliente)
-rotas.get('/cliente/:id', validarDadosParametro(schemas.schemaClienteId), detalharCliente);
-rotas.put('/cliente/:id', validarDadosParametro(schemas.schemaClienteId), validarDadosRequisicao(schemas.schemaCliente), atualizarCliente)
+rotas.get('/cliente/:id', validarDadosParametro(schemas.schemaId), detalharCliente);
+rotas.put('/cliente/:id', validarDadosParametro(schemas.schemaId), validarDadosRequisicao(schemas.schemaCliente), atualizarCliente)
 
 rotas.post('/produto', multer.single('produto_imagem'), validarDadosRequisicao(schemas.schemaProduto), produto.cadastrarProduto);
 rotas.get('/produto', produto.listarProdutos)
-rotas.delete('/produto/:id', produto.excluirProduto);
-rotas.put("/produto/:id", multer.single('produto_imagem'), validarDadosRequisicao(schemas.schemaProduto), produto.atualizarProduto);
-rotas.get("/produto/:id", produto.detalharProduto)
+rotas.delete('/produto/:id', validarDadosParametro(schemas.schemaId), produto.excluirProduto);
+rotas.put("/produto/:id", multer.single('produto_imagem'), validarDadosParametro(schemas.schemaId), validarDadosRequisicao(schemas.schemaProduto), produto.atualizarProduto);
+rotas.get("/produto/:id", validarDadosParametro(schemas.schemaId), produto.detalharProduto)
 
 rotas.get('/pedidos', pedidos.listarPedidos);
 rotas.post('/pedido', validarDadosRequisicao(schemas.schemaCadastrarPedido), pedidos.cadastrarPedido);

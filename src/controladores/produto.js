@@ -34,7 +34,6 @@ const cadastrarProduto = async (req, res) => {
   }
 }
 
-
 const listarProdutos = async (req, res) => {
   const produtos = await requisicoes.listarProduto()
   return res.status(200).json(produtos)
@@ -44,14 +43,20 @@ const listarProdutos = async (req, res) => {
 const excluirProduto = async (req, res) => {
   const { id } = req.params;
 
-  if (isNaN(Number(id))) {
-    return res.status(400).json({ mensagem: mensagens.produtoInexistente })
-  }
-
   try {
-    produtoExistente = await requisicoes.buscarProduto(id);
+    const produtoExistente = await requisicoes.buscarProduto(id);
     if (!produtoExistente) {
       return res.status(400).json({ mensagem: mensagens.produtoInexistente });
+    }
+
+    const produtoEmPedido = await requisicoes.buscarProdutoEmPedidos(id);
+    if (produtoEmPedido) {
+      return res.status(400).json({ mensagem: mensagens.produtoEmPedido });
+    }
+
+    if (produtoExistente.produto_imagem) {
+      let path = produtoExistente.produto_imagem.split(`${process.env.S3_BUCKET}/`)[1]
+      await armazenamento.excluirImagem(path)
     }
 
     await requisicoes.excluirProduto(id);
@@ -68,17 +73,13 @@ const atualizarProduto = async (req, res) => {
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
   const produto_imagem = req.file
 
-  if (isNaN(Number(id))) {
-    return res.status(400).json({ mensagem: mensagens.produtoInexistente })
-  }
-
   try {
-    produtoExistente = await requisicoes.buscarProduto(id);
+    const produtoExistente = await requisicoes.buscarProduto(id);
     if (!produtoExistente) {
       return res.status(404).json({ mensagem: mensagens.produtoInexistente });
     }
 
-    categoriaExistente = await categoriaDados.buscarCategoriaPorId(categoria_id);
+    const categoriaExistente = await categoriaDados.buscarCategoriaPorId(categoria_id);
     if (!categoriaExistente) {
       return res.status(404).json({ mensagem: mensagens.categoriaInexistente });
     }
@@ -108,12 +109,8 @@ const atualizarProduto = async (req, res) => {
 const detalharProduto = async (req, res) => {
   const { id } = req.params;
 
-  if (isNaN(Number(id))) {
-    return res.status(400).json({ mensagem: mensagens.produtoInexistente })
-  }
-
   try {
-    produtoExistente = await requisicoes.buscarProduto(id);
+    const produtoExistente = await requisicoes.buscarProduto(id);
     if (!produtoExistente) {
       return res.status(404).json({ mensagem: mensagens.produtoInexistente });
     }
@@ -125,10 +122,10 @@ const detalharProduto = async (req, res) => {
 
 
 module.exports = {
-cadastrarProduto,
-listarProdutos,
-excluirProduto,
-atualizarProduto,
-detalharProduto
+  cadastrarProduto,
+  listarProdutos,
+  excluirProduto,
+  atualizarProduto,
+  detalharProduto
 
 }

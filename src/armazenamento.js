@@ -22,6 +22,15 @@ const armazenarImagem = async (id, path, buffer, mimetype) => {
     return file
 }
 
+// Verificar onde estão sendo salvas as imagens para excluir
+const excluirImagem = async (path) => {
+    await s3.deleteObject({
+        Bucket: process.env.S3_BUCKET,
+        Key: path
+    }).promise()
+}
+
 module.exports = {
-    armazenarImagem
+    armazenarImagem,
+    excluirImagem
 }
