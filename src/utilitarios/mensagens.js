@@ -16,8 +16,8 @@ const mensagens = {
     produtoCriado: "Produto criado com sucesso",
     produtoJaCadastrado: "Este produto já foi cadastrado, vá em editar para atualizar as informações necessárias",
     produtoEmPedido: "O produto não pode ser excluido, pois já foi usado em um pedido.",
-
-
+    produtoInsuficiente: "A quantidade deste produto é insuficiente.",
+    pedidoGerado: "Pedido cadastrado com sucesso!"
 }
 
 module.exports = mensagens;

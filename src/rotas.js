@@ -37,6 +37,7 @@ rotas.put("/produto/:id", multer.single('produto_imagem'), validarDadosParametro
 rotas.get("/produto/:id", validarDadosParametro(schemas.schemaId), produto.detalharProduto)
 
 rotas.get('/pedidos', pedidos.listarPedidos);
+rotas.post('/pedido', validarDadosRequisicao(schemas.schemaCadastrarPedido), pedidos.cadastrarPedido);
 
 //rota pra testar autenticador
 rotas.get('/autenticar', (req, res) => res.json({ mensagem: "OK", usuario: req.usuario }))
