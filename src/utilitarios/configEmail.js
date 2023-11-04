@@ -22,7 +22,7 @@ const compilarHTML = async (file, context) => {
 
 }
 
-const enviarEmail = (html, email, numPedido) => {
+const enviarEmail = async (html, email, numPedido) => {
     transportador.sendMail({
         from: `${process.env.MAIL_NAME} <${process.env.MAIL_FROM}>`,
         to: email,
