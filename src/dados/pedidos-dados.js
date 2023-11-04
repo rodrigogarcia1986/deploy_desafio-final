@@ -21,8 +21,8 @@ const buscarCliente = async (cliente_id) => {
 const cadastrarPedido = async (cliente_id, observacao, valorTotal) => {
   const resultado = await knex("pedidos")
     .insert({
-      cliente_id: cliente_id,
-      observacao: observacao,
+      cliente_id,
+      observacao,
       valor_total: valorTotal,
     })
     .returning("*");

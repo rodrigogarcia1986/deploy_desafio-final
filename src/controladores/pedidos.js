@@ -1,6 +1,7 @@
 const requisicao = require("../dados/pedidos-dados");
 const produtoDados = require("../dados/produto-dados");
 const mensagem = require("../utilitarios/mensagens");
+const { compilarHTML, enviarEmail } = require("../utilitarios/configEmail")
 
 const listarPedidos = async (req, res) => {
   const { cliente_id } = req.query;
@@ -32,6 +33,7 @@ const listarPedidos = async (req, res) => {
 const cadastrarPedido = async (req, res) => {
   const { observacao, pedido_produtos, cliente_id } = req.body;
 
+
   try {
     const cliente = await requisicao.buscarCliente(cliente_id);
 
@@ -48,14 +50,14 @@ const cadastrarPedido = async (req, res) => {
         erros.push({
           mensagem: mensagem.produtoInexistente,
         });
-        continue;
+        //continue;
       }
 
       if (item.quantidade_produto > produto.quantidade_estoque) {
         erros.push({
           mensagem: mensagem.produtoInsuficiente,
         });
-        continue;
+        //continue;
       }
 
       valorTotal += produto.valor * item.quantidade_produto;
@@ -80,8 +82,16 @@ const cadastrarPedido = async (req, res) => {
       await produtoDados.atualizarProduto(produto);
     }
 
+    const contexto = {
+      name: req.usuario.nome
+    }
+
+    const HTML = await compilarHTML('../desafio-backend-modulo-05-sistema-pdv-dbe-t02-2/src/templates/pedidos.html', contexto)
+    enviarEmail(HTML, cliente.email, pedido.id)
+
     return res.status(201).json({ mensagem: mensagem.pedidoGerado });
   } catch (error) {
+    console.log("Erro:", error.message)
     return res.status(400).json({ mensagem: mensagem.erroInterno });
   }
 };
