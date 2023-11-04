@@ -86,7 +86,7 @@ const cadastrarPedido = async (req, res) => {
       name: req.usuario.nome
     }
 
-    const HTML = await compilarHTML('../templates/pedidos.html', contexto)
+    const HTML = await compilarHTML('src/templates/pedidos.html', contexto)
     enviarEmail(HTML, cliente.email, pedido.id)
 
     return res.status(201).json({ mensagem: mensagem.pedidoGerado });
