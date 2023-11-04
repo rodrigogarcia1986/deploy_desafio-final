@@ -87,12 +87,12 @@ const cadastrarPedido = async (req, res) => {
     }
 
     const HTML = await compilarHTML('src/templates/pedidos.html', contexto)
-    enviarEmail(HTML, cliente.email, pedido.id)
+    await enviarEmail(HTML, cliente.email, pedido.id)
 
     return res.status(201).json({ mensagem: mensagem.pedidoGerado });
   } catch (error) {
     console.log("Erro:", error.message)
-    return res.status(400).json({ mensagem: mensagem.erroInterno });
+    return res.status(500).json({ mensagem: mensagem.erroInterno });
   }
 };
 
