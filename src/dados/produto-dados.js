@@ -10,6 +10,10 @@ const listarProduto = async () => {
   return await knex("produtos");
 };
 
+const listarProdutoPorCategoria = async (categoria_id) => {
+  return await knex("produtos").where({ categoria_id })
+}
+
 const cadastrarProduto = async (descricao, quantidade_estoque, valor, categoria_id, produto_imagem) => {
   return await knex("produtos")
     .insert({ descricao, quantidade_estoque, valor, categoria_id, produto_imagem })
@@ -49,6 +53,7 @@ module.exports = {
   atualizarProduto,
   verificarCategoria,
   listarProduto,
+  listarProdutoPorCategoria,
   cadastrarProduto,
   verificarProdutosPorDescricao,
   buscarProdutoEmPedidos
