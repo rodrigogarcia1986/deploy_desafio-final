@@ -55,7 +55,7 @@ const excluirProduto = async (req, res) => {
     }
 
     if (produtoExistente.produto_imagem) {
-      let path = produtoExistente.produto_imagem.split(`${process.env.S3_BUCKET}/`)[1]
+      let path = produtoExistente.produto_imagem.split(`${process.env.S3_BUCKET}.${process.env.S3_ENDPOINT}/`)[1]
       await armazenamento.excluirImagem(path)
     }
 
